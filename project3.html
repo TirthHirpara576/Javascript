@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rock Paper Scissors</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                text-align: center;
+            }
+            h1{
+                background-color: #081b31;
+                color: #fff;
+                height: 4rem;
+                line-height: 4rem;  /* text vertically pan center ma aavi jai... */
+            }
+            .choises{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 3rem;
+                gap: 4rem;
+            }
+            .choise{
+                height: 160px;
+                width: 160px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .choise:hover{
+                opacity: 0.9;
+                cursor: pointer;
+                
+                background-color: #081b31;
+                border-radius: 50%;
+            }
+            img{
+                height: 150px;
+                width: 150px;
+                object-fit: cover; /* images thodik vadhu sari rite aavi jai... */
+                border-radius: 50%;
+            }
+            .Score-Board{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                margin-top: 3rem;
+                font-size: 2rem;
+                gap: 5rem;
+            }
+            #user-score,#comp-score{
+                font-size: 3rem;
+            }
+            .msg-container{
+                margin-top: 5rem;
+            }
+            #msg{
+                
+                background-color: #081b31;
+                color: #fff;
+                font-size: 2rem;
+
+                display: inline;
+                border-radius: 1rem;
+                padding: 1rem;
+                border: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Rock Paper Scissors</h1>
+        <div class="choises">
+            <div class="choise" id="rock"> <img src="Rock.jpeg" alt=""> </div>
+            <div class="choise" id="paper"> <img src="Paper.jpeg" alt=""> </div>
+            <div class="choise" id="scissor"> <img src="Scissor.jpeg" alt=""> </div>
+        </div>
+
+        <div class="Score-Board">
+            <div class="score"> <p  id="user-score">0</p> <p>You</p> </div>
+            <div class="score"> <p  id="comp-score">0</p> <p>Comp</p> </div>
+        </div>
+
+        <div class="msg-container"> <p id="msg">Play your move</p> </div>
+
+
+
+        <script>
+            let userScore = 0;
+            let compScore = 0;
+
+            const choises = document.querySelectorAll(".choise");   // user choises
+            let msg = document.querySelector('#msg');  
+            const userChoise_para = document.querySelector("#user-score");
+            const compChoise_para = document.querySelector("#comp-score");
+            
+            //after generating computer choise , who win ?
+            const genCompChoise = () =>{
+                const options = ["rock","paper","scissors"];  // 0 to 2 range ma number(idx) jota hovathi -> Math.floor(Math.random()*3);
+                let i = Math.floor(Math.random()*3);
+                return options[i]; //computer choise 
+            }
+            const PlayGame = (userChoise) =>{
+                // we have userChoise , let us generate computer choise :
+                console.log("user choise",userChoise);
+                const compChoise = genCompChoise();
+                console.log("computer choise",compChoise);
+
+                if(userChoise == compChoise){
+                    //console.log("Game was draw.");
+                    msg.innerText = "Game was draw.";
+                    msg.style.backgroundColor = "#081b31";
+                }
+                else{
+                    let userWin = true;
+                    if(userChoise === "rock"){
+                        userWin = compChoise==="paper" ? false : true; // rock > paper -> comp win
+                    }
+                    else if(userChoise === "paper"){
+                        userWin = compChoise==="scissors" ? false : true; // scissors > paper -> comp win
+                    }
+                    else{
+                        userWin = compChoise==="rock" ? false : true; // rock > scissors -> comp win
+                    }
+
+                    if(userWin){
+                        //console.log("You win!");
+                        msg.innerText = `You win! your ${userChoise} beats ${compChoise}.`;
+                        msg.style.backgroundColor = "green";
+
+                        userScore++;
+                        userChoise_para.innerText = userScore;
+                    }
+                    else{
+                        //console.log("You loss!");
+                        msg.innerText = `You loss! ${compChoise} beats your ${userChoise}.`;
+                        msg.style.backgroundColor = "red";
+
+                        compScore++;
+                        compChoise_para.innerText = compScore;
+                    }
+                }
+            }
+
+            choises.forEach((choise)=>{
+                choise.addEventListener("click",()=>{
+                    const user_choiseId = choise.getAttribute("id");
+                    //console.log("Id of choise : ",user_choiseId);
+                    PlayGame(user_choiseId);
+                });
+            });
+            
+        </script>
+    </body>
+</html>
