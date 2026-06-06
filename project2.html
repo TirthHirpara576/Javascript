@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>stop watch</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            body{
+                min-height: 100vh;
+                background-color: rgba(0,0,0,0.7);
+                color: #ffffff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            .stopWatch{
+                background-color: rgba(0,0,0,0.9);
+                padding: 20px 24px;
+                border-radius: 7px;
+            }
+            .timerDisplay{
+                font-size: xx-large;
+                font-weight: bold;
+            }
+            .buttons{
+                margin-top: 20px;
+            }
+            .btn{
+                font-size: 20px;
+                background: none;
+                border: none;
+                color: white;
+                background-color: var(--clr);
+                padding: 12px 24px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div class="stopWatch">
+            <div class="timerDisplay">00 : 00 : 00</div>
+        </div>
+        <div class="buttons">
+            <button class="btn" id="stopBtn" style="--clr:red">Stop</button>
+            <button class="btn" id="startBtn" style="--clr:green">Start</button>
+            <button class="btn" id="resetBtn" style="--clr:blue">Reset</button>
+        </div>
+
+
+
+        <script>
+
+            let timerDisplay = document.querySelector('.timerDisplay');
+            let startBtn = document.getElementById('startBtn');
+            let stopBtn = document.getElementById('stopBtn');
+            let resetBtn = document.getElementById('resetBtn');
+
+            let ms = 0;
+            let s = 0;
+            let min = 0;
+
+            let timerId = null;
+            startBtn.addEventListener('click',function(){
+                if(timerId !== null) clearInterval(timerId);
+                timerId = setInterval(startTimer , 10);
+            });
+
+            stopBtn.addEventListener('click',function(){
+                clearInterval(timerId);
+            });
+
+            resetBtn.addEventListener('click',function(){
+                clearInterval(timerId);
+                ms = s = min = 0;
+                timerDisplay.innerHTML = `00 : 00 : 00`;
+            });
+
+            function startTimer(){
+                ms++;
+                if(ms == 100){
+                    ms = 0;
+                    s++;
+                    if(s == 60){
+                        s = 0;
+                        min++;
+                    }
+                }
+
+                let ms_string = ms<10 ? `0${ms}` : ms; 
+                let s_string = s<10 ? `0${s}` : s; 
+                let min_string = min<10 ? `0${min}` : min; 
+
+                timerDisplay.innerHTML = `${min_string} : ${s_string} : ${ms_string}`;
+            }
+
+        </script>
+        
+    </body>
+</html>
